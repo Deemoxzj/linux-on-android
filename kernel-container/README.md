@@ -3,14 +3,22 @@ repo init \                                                                     
   -u https://android.googlesource.com/kernel/manifest \
   -b common-android13-5.15 \
   --depth=1
+  
 #同步源码
 repo sync -j$(nproc) --no-tags
+
 编译命令
 LTO=thin BUILD_CONFIG=common/build.config.gki.aarch64 build/build.sh -j$(nproc)
+
 #NTSYNC内核补丁
 git clone https://github.com/Goldzxcbug/Droidspaces_Kernel_patch
+
 #root sukisu
 curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s v4.1.3
+
+#sufs
+git clone https://gitlab.com/simonpunk/susfs4ksu
+
 #defconfig
 CONFIG_PID_NS=y
 CONFIG_IP_VS=y
