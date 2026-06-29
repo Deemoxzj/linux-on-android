@@ -17,56 +17,34 @@ git clone https://github.com/Goldzxcbug/Droidspaces_Kernel_patch
 curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s v4.1.3
 
 #sufs
-git clone https://gitlab.com/simonpunk/susfs4ksu
+git clone https://gitlab.com/simonpunk/susfs4ksu -b *
 
-#defconfig
-CONFIG_PID_NS=y
-CONFIG_IP_VS=y
-CONFIG_MODULE_FORCE_LOAD=y
-CONFIG_SYSVIPC=y
-CONFIG_POSIX_MQUEUE=y
-CONFIG_CGROUP_DEVICE=y
-CONFIG_USER_NS=y
-CONFIG_BRIDGE_NETFILTER=y
-CONFIG_NETFILTER_XT_TARGET_CHECKSUM=y
-CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=y
-CONFIG_NETFILTER_XT_MATCH_IPVS=y
-CONFIG_IP6_NF_NAT=y
-CONFIG_IP6_NF_TARGET_MASQUERADE=y
-CONFIG_BT_HCIVHCI=y
-CONFIG_DEVTMPFS=y
-CONFIG_NULL_TTY=y
-#
-CONFIG_FHANDLE=y
-CONFIG_UNIX_DIAG=y
-CONFIG_PACKET_DIAG=y
-CONFIG_NETLINK_DIAG=y
-CONFIG_MACVLAN=y
-CONFIG_LOCALVERSION="-Deemo-SkSU-NTS"
-CONFIG_NTSYNC=y
-#eBPF
-#CONFIG_FTRACE_SYSCALLS=y
-#CONFIG_FUNCTION_TRACER=y
-#CONFIG_FUNCTION_GRAPH_TRACER=y
-#CONFIG_STACK_TRACER=y
-#CONFIG_DYNAMIC_FTRACE=y
+# 1) 给 KernelSU 部分的补丁
+cp susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch $KERNEL_REPO/KernelSU/
 
-#test
-CONFIG_IPC_NS=y
-# UFW support
-CONFIG_NETFILTER_XT_TARGET_REJECT=y
-CONFIG_NETFILTER_XT_TARGET_LOG=y
-CONFIG_NETFILTER_XT_MATCH_RECENT=y
-# Fail2ban support
-CONFIG_IP_SET=y
-CONFIG_IP_SET_HASH_IP=y
-CONFIG_IP_SET_HASH_NET=y
-CONFIG_NETFILTER_XT_SET=y
-# Enable xattr support on tmpfs
-# (required for NixOS setcap wrappers in /run/wrappers)
-CONFIG_TMPFS_XATTR=y
-#KPM
-CONFIG_KPM=y
-CONFIG_SECURITY=y
-CONFIG_SECURITYFS=y
-CONFIG_SECURITY_LANDLOCK=y
+# 2) 给 common 内核部分的补丁（注意内核版本号要对上！）
+cp susfs4ksu/kernel_patches/50_add_susfs_in_kernel-<kernel_version>.patch $KERNEL_REPO/common/
+# 例：6.1 → 50_add_susfs_in_gki-android14-6.1.patch
+
+# 3) 替换/新增的源码文件
+cp susfs4ksu/kernel_patches/fs/* $KERNEL_REPO/common/fs/
+cp susfs4ksu/kernel_patches/include/linux/* $KERNEL_REPO/common/include/linux/
+
+# 先打 KSU 侧
+cd $KERNEL_REPO/KernelSU
+patch -p1 < 10_enable_susfs_for_ksu.patch
+
+# 再打内核侧
+cd $KERNEL_REPO/common
+patch -p1 < 50_add_susfs_in_kernel-<kernel_version>.patch
+
+# 两种方式任选：menuconfig / 直接改 defconfig
+# 必须：
+CONFIG_KSU=y
+CONFIG_KSU_SUSFS=y
+
+# 可选特性（按需开）：
+CONFIG_KSU_SUSFS_SUS_PATH=y
+CONFIG_KSU_SUSFS_SUS_MOUNT=y
+CONFIG_KSU_SUSFS_TRY_UMOUNT=y
+# ...其余见 $KernelSU_repo/kernel/Kconfig
