@@ -7,9 +7,11 @@ repo init \                                                                     
 #同步源码
 repo sync -j$(nproc) --no-tags
 
-编译命令
+#编译命令
 LTO=thin BUILD_CONFIG=common/build.config.gki.aarch64 build/build.sh -j$(nproc)
 
+#789补丁优先
+https://github.com/ravindu644/Droidspaces-OSS/tree/main/Documentation/resources/kernel-patches/GKI/below-kernel-6.12
 #NTSYNC内核补丁
 git clone https://github.com/Goldzxcbug/Droidspaces_Kernel_patch
 
@@ -48,3 +50,14 @@ CONFIG_KSU_SUSFS_SUS_PATH=y
 CONFIG_KSU_SUSFS_SUS_MOUNT=y
 CONFIG_KSU_SUSFS_TRY_UMOUNT=y
 # ...其余见 $KernelSU_repo/kernel/Kconfig
+cd common
+ARCH=arm64 scripts/config \
+    --enable CONFIG_KSU \
+    --enable CONFIG_KSU_SUSFS \
+    --enable CONFIG_KSU_SUSFS_SUS_PATH \
+    --enable CONFIG_KSU_SUSFS_SUS_MOUNT \
+    --enable CONFIG_KSU_SUSFS_TRY_UMOUNT \
+    --enable CONFIG_KSU_MANUAL_HOOK \
+    --enable CONFIG_KALLSYMS \
+    --enable CONFIG_KALLSYMS_ALL \
+    --enable CONFIG_KPM
