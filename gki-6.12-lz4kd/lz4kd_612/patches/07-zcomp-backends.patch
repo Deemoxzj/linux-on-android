@@ -1,0 +1,15 @@
+--- a/drivers/block/zram/zcomp.c
++++ b/drivers/block/zram/zcomp.c
+@@ -31,6 +31,12 @@
+ #if IS_ENABLED(CONFIG_ZRAM_BACKEND_LZ4HC)
+ 	&backend_lz4hc,
+ #endif
++#if IS_ENABLED(CONFIG_ZRAM_BACKEND_LZ4K)
++	&backend_lz4k,
++#endif
++#if IS_ENABLED(CONFIG_ZRAM_BACKEND_LZ4KD)
++	&backend_lz4kd,
++#endif
+ #if IS_ENABLED(CONFIG_ZRAM_BACKEND_ZSTD)
+ 	&backend_zstd,
+ #endif

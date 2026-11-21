@@ -1,0 +1,6 @@
+# 保证脚本与补丁在任意平台 checkout 都是 LF，否则 bash/patch 会因 CR 失败
+*.sh text eol=lf
+*.patch text eol=lf
+*.c   text eol=lf
+*.h   text eol=lf
+*.md  text eol=lf

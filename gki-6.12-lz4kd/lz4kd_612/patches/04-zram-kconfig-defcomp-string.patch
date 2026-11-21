@@ -1,0 +1,11 @@
+--- a/drivers/block/zram/Kconfig
++++ b/drivers/block/zram/Kconfig
+@@ -99,6 +99,8 @@
+ 	default "lzo" if ZRAM_DEF_COMP_LZO
+ 	default "lz4" if ZRAM_DEF_COMP_LZ4
+ 	default "lz4hc" if ZRAM_DEF_COMP_LZ4HC
++	default "lz4k" if ZRAM_DEF_COMP_LZ4K
++	default "lz4kd" if ZRAM_DEF_COMP_LZ4KD
+ 	default "zstd" if ZRAM_DEF_COMP_ZSTD
+ 	default "deflate" if ZRAM_DEF_COMP_DEFLATE
+ 	default "842" if ZRAM_DEF_COMP_842

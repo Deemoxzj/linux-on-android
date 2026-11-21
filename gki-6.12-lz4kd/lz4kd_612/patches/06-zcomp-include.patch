@@ -1,0 +1,10 @@
+--- a/drivers/block/zram/zcomp.c
++++ b/drivers/block/zram/zcomp.c
+@@ -16,6 +16,7 @@
+ #include "backend_lzorle.h"
+ #include "backend_lz4.h"
+ #include "backend_lz4hc.h"
++#include "backend_lz4kd.h"
+ #include "backend_zstd.h"
+ #include "backend_deflate.h"
+ #include "backend_842.h"

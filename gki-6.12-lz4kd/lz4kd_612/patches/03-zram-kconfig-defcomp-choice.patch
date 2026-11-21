@@ -1,0 +1,17 @@
+--- a/drivers/block/zram/Kconfig
++++ b/drivers/block/zram/Kconfig
+@@ -78,6 +78,14 @@
+ 	bool "lz4hc"
+ 	depends on ZRAM_BACKEND_LZ4HC
+ 
++config ZRAM_DEF_COMP_LZ4K
++	bool "lz4k"
++	depends on ZRAM_BACKEND_LZ4K
++
++config ZRAM_DEF_COMP_LZ4KD
++	bool "lz4kd"
++	depends on ZRAM_BACKEND_LZ4KD
++
+ config ZRAM_DEF_COMP_ZSTD
+ 	bool "zstd"
+ 	depends on ZRAM_BACKEND_ZSTD
