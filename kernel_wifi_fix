@@ -1,0 +1,4 @@
+#在 .github/workflows/build.yml 第 1594 行之后、tools/bazel build 之前插入：
+# 保留全部导出符号：否则 vendor_dlkm 的 cfg80211/mac80211/qca_cld3
+# 模块会因符号被 trim 掉而报 Unknown symbol，WiFi 起不来
+sed -i -E 's/^([[:space:]]*trim_nonlisted_kmi[[:space:]]*=[[:space:]]*)True/\1False/' ./common/BUILD.bazel
